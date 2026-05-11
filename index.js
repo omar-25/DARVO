@@ -1,7 +1,8 @@
 
-require("dotenv").config();
+//require("dotenv").config();
 const express = require("express");
 const userRouter = require("./Server/User/User.Router/User_Router");
+const adminRouter = require("./Server/Admin/Admin_Router");
 const app = express();
 
 const cors = require("cors");
@@ -11,6 +12,7 @@ connection();
 app.use(cors());
 app.use(express.json());
 app.use("/", userRouter);
+app.use("/admin", adminRouter);
 
 app.get('/', (req, res) => {
   res.send('Server side for Your application is now runinng....');
