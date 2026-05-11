@@ -6,6 +6,7 @@ const userRouter = require("./Server/User/User.Router/User_Router");
 const propertyRoutes = require('./Server/Property/Property.Routers/Property_Routers');
 const connection = require("./Server/DataBase");
 
+const adminRouter = require("./Server/Admin/Admin_Router");
 const app = express();
 
 app.use(cors());
@@ -24,6 +25,7 @@ mongoose.connection.once("open", async () => {
 
 app.use('/property', propertyRoutes);
 app.use("/", userRouter);
+app.use("/admin", adminRouter);
 
 app.get('/', (req, res) => {
     res.send('Server side for Your application is now running....');

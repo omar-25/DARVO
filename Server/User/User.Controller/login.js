@@ -8,7 +8,7 @@ const login = async (req, res) => {
             return res.status(400).json({ message: "Please fill all the required fields (email, password)" });
         }
 
-        const existingUser = await User.findOne({ email: req.body.email.toLowerCase() });
+        const existingUser = await User.findOne({ email: req.body.email.toLowerCase() }).select("+password");
         const isPasswordValid = existingUser
             ? await bcrypt.compare(req.body.password, existingUser.password)
             : false;
@@ -18,7 +18,9 @@ const login = async (req, res) => {
         }
 
         const token = jwt.sign(
-            { userId: existingUser._id },
+            {   userId: existingUser._id ,
+                role: existingUser.role  
+            },
             process.env.JWT_SECRET,
             { expiresIn: "1h" }
         );
