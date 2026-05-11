@@ -1,14 +1,17 @@
-const User = require("../Models/user");
+const User = require('../User.Model/User_Model');
 const bcrypt = require("bcrypt");
+
 const signup = async (req, res) => {
+
   try {
 
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
       return res.status(400).send({
-        message: "write name and email and password"
+        message: "Please write name , email and password"
       });
+
     }
     
     const hashedPassword = await bcrypt.hash(password, 10);
