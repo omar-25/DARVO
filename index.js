@@ -1,4 +1,5 @@
 require("dotenv").config();
+const path = require("path");
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -26,6 +27,20 @@ mongoose.connection.once("open", async () => {
 app.use('/property', propertyRoutes);
 app.use("/", userRouter);
 app.use("/admin", adminRouter);
+
+app.get('/login', (req, res) => {
+  if (process.env.NODE_ENV !== "production") {
+    return res.redirect("http://localhost:3000/login");
+  }
+  res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+});
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "client", "build")));
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+  });
+}
 
 app.get('/', (req, res) => {
     res.send('Server side for Your application is now running....');
