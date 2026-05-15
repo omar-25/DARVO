@@ -41,7 +41,8 @@ const PropertySchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        default: "Available"
+        enum:['Available','Sold','Pending Review','Rejected'],
+        default: "Pending Review"
     },
     gardenArea: {
         type: Number,
@@ -54,7 +55,10 @@ const PropertySchema = new mongoose.Schema({
     offers: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Offer"
-    }]
+    }],
+    rejectionReason:{
+        type:String,
+    }
 }, { timestamps: true });
 
 PropertySchema.methods.updateDetails = function(updatedProperty) {

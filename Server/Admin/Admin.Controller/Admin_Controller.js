@@ -1,4 +1,5 @@
 const User = require('../../User/User.Model/User_Model');
+const Property = require('../../Property/Property.Models/Property_Models');
 const bcrypt = require('bcrypt');
 
 const getAllUsers = async (req, res) => {
@@ -82,5 +83,30 @@ const getAllProperties = async (req, res) => {
     res.status(500).send({ message: error.message });
   }
 };
+const getPendingProperties=async(req,res)=>{
+  try{
+    const properties=await Property.find({status:"Pending Review"})
+    res.status(200).send(properties);
+  }catch(error){
+    res.status(500).send({message:error.message})
+  }
+};
+const approveProperty = async (req, res) => {
+  try {
+    const property = await Property.findById(req.params.id);
+    if (!property) return res.status(404).send({ message: "Property not found" });
 
-module.exports = { getAllUsers, getUserById, deleteUser, createSalesAgent, createAdmin, deleteProperty, getAllProperties };
+    property.status = req.body.status;
+
+    if (req.body.rejectionReason) {
+      property.rejectionReason = req.body.rejectionReason;
+    }
+
+    await property.save();
+    res.status(200).send({ message: "Property updated successfully" });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+};
+
+module.exports = { getAllUsers, getUserById, deleteUser, createSalesAgent, createAdmin, deleteProperty, getAllProperties,getPendingProperties,approveProperty };
