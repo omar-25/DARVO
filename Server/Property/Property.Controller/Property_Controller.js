@@ -228,6 +228,81 @@ const addImage = async (req, res) => {
     }
 };
 
+// SEARCH PROPERTIES
+const searchProperties = async (req, res) => {
+    try {
+
+        const {
+            propertyLocation,
+            propertyType,
+            status,
+            minPrice,
+            maxPrice,
+            bedrooms,
+            bathrooms
+        } = req.query;
+
+        let filter = {};
+
+        // LOCATION SEARCH
+        if (propertyLocation) {
+            filter.propertyLocation = {
+                $regex: propertyLocation,
+                $options: "i"
+            };
+        }
+
+        // PROPERTY TYPE
+        if (propertyType) {
+            filter.propertyType = propertyType;
+        }
+
+        // STATUS
+        if (status) {
+            filter.status = status;
+        }
+
+        // BEDROOMS
+        if (bedrooms) {
+            filter.bedrooms = Number(bedrooms);
+        }
+
+        // BATHROOMS
+        if (bathrooms) {
+            filter.bathrooms = Number(bathrooms);
+        }
+
+        // PRICE FILTER
+        if (minPrice || maxPrice) {
+            filter.price = {};
+
+            if (minPrice) {
+                filter.price.$gte = Number(minPrice);
+            }
+
+            if (maxPrice) {
+                filter.price.$lte = Number(maxPrice);
+            }
+        }
+
+        const properties = await Property.find(filter)
+            .populate("propertyOwner", "name email")
+            .populate("assignedSales", "name email");
+
+        return res.status(200).json({
+            count: properties.length,
+            data: properties
+        });
+
+    } catch (error) {
+        console.error("searchProperties error:", error);
+
+        return res.status(500).json({
+            message: error.message
+        });
+    }
+};
+
 
 module.exports = {
     createProperty,
@@ -235,6 +310,7 @@ module.exports = {
     getPropertyById,
     updateProperty,
     deleteProperty,
+    searchProperties,
     changeStatus,
     addImage
 };

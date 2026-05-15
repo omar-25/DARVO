@@ -9,6 +9,10 @@ const PropertySchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    price: {
+    type: Number,
+    required: true
+    },
     propertyLocation: {
         type: String,
         required: true
@@ -52,6 +56,7 @@ const PropertySchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    
     offers: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Offer"
