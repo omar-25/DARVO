@@ -12,7 +12,7 @@ router.post("/create", propertyController.createProperty);
 
 router.get("/get", propertyController.getAllProperties);
 
-
+router.get("/search", propertyController.searchProperties);
 
 router.get("/get/:id", propertyController.getPropertyById);
 
