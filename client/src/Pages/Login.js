@@ -43,7 +43,7 @@ function Login() {
 
       // Optionally redirect after successful login
       setTimeout(() => {
-        window.location.href = '/dashboard'; // Change this to your desired route
+        window.location.href = '/'; // Change this to your desired route
       }, 1500);
     } catch (err) {
       setError('Network error: ' + err.message);

@@ -1,0 +1,348 @@
+.property-details-page {
+  min-height: 100vh;
+  background: #f5f5f5;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  position: relative;
+}
+
+/* Small subtle back button in top left corner */
+.back-arrow-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background: white;
+  border: 1px solid #e0e0e0;
+  padding: 8px 16px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #2e7d32;
+  transition: all 0.2s ease;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.back-arrow-btn:hover {
+  background: #ffffff;
+  border-color: #4caf50;
+  transform: translateX(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Main content */
+.details-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 24px 40px 24px;
+}
+
+/* Property details card */
+.property-details-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+/* Image section */
+.details-image {
+  background: #f5f5f5;
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.details-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.no-image-large {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 500px;
+  color: #999;
+  font-size: 1rem;
+  background: #f5f5f5;
+}
+
+/* Info section */
+.details-info {
+  padding: 40px;
+}
+
+.details-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1b5e20;
+  margin-bottom: 8px;
+}
+
+.details-location {
+  color: #666;
+  font-size: 1rem;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.details-price {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #2e7d32;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #e8f5e9;
+}
+
+/* Stats grid - This is what fixes your layout issue */
+.details-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat {
+  background: #f8f9fa;
+  padding: 12px 16px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.7rem;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.stat-value {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #2e7d32;
+}
+
+/* Description section */
+.details-description {
+  margin-bottom: 24px;
+}
+
+.details-description h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.details-description p {
+  color: #666;
+  line-height: 1.6;
+  font-size: 0.9rem;
+}
+
+/* Amenities section */
+.details-amenities {
+  margin-bottom: 24px;
+}
+
+.details-amenities h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.amenities-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.amenity-badge {
+  background: #e8f5e9;
+  color: #2e7d32;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* Status section */
+.details-status {
+  margin-bottom: 30px;
+}
+
+.status {
+  display: inline-block;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.status.available {
+  background: #e8f5e9;
+  color: #4caf50;
+}
+
+.status.sold {
+  background: #ffebee;
+  color: #f44336;
+}
+
+.status.pending-review {
+  background: #fff3e0;
+  color: #ff9800;
+}
+
+/* Contact button */
+.contact-agent-btn {
+  width: 100%;
+  padding: 14px;
+  background: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.contact-agent-btn:hover {
+  background: #388e3c;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+/* Loading and error states */
+.details-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #f5f5f5;
+}
+
+.loading-spinner {
+  text-align: center;
+  padding: 60px;
+  font-size: 1rem;
+  color: #2e7d32;
+}
+
+.error-message {
+  text-align: center;
+  padding: 60px;
+  font-size: 1rem;
+  color: #f44336;
+  background: white;
+  border-radius: 12px;
+  margin: 20px;
+}
+
+/* Small square back button in top left corner */
+.back-arrow-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background: white;
+  border: 1px solid #e0e0e0;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #2e7d32;
+  transition: all 0.2s ease;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-arrow-btn:hover {
+  background: #ffffff;
+  border-color: #4caf50;
+  transform: translateX(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+/* Responsive design */
+@media (max-width: 768px) {
+  .back-arrow-btn {
+    top: 12px;
+    left: 12px;
+    padding: 6px 12px;
+    font-size: 0.75rem;
+  }
+  
+  .details-content {
+    padding: 60px 16px 20px 16px;
+  }
+  
+  .property-details-card {
+    grid-template-columns: 1fr;
+    border-radius: 16px;
+  }
+  
+  .details-image {
+    min-height: 300px;
+  }
+  
+  .no-image-large {
+    height: 300px;
+  }
+  
+  .details-info {
+    padding: 24px;
+  }
+  
+  .details-title {
+    font-size: 1.5rem;
+  }
+  
+  .details-price {
+    font-size: 1.4rem;
+  }
+  
+  .details-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  
+  .stat {
+    padding: 8px 12px;
+  }
+  
+  .stat-value {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .details-stats {
+    grid-template-columns: 1fr;
+  }
+}
