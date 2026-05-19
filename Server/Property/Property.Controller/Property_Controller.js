@@ -1,9 +1,9 @@
 const Property = require('../Property.Models/Property_Models');
 
-
-
 const createProperty = async (req, res) => {
     try {
+        console.log("Received body:", req.body); // Debug log
+        
         const {
             propertyName,
             propertyDescription,
@@ -19,12 +19,15 @@ const createProperty = async (req, res) => {
             status,
             gardenArea,
             roofArea,
-            offers
+            offers,
+            images
         } = req.body;
 
+  
         if (!propertyName || !propertyDescription || !propertyLocation || !propertyType || !bedrooms || !bathrooms || !price) {
             return res.status(400).json({
-                message: "Send all required fields: propertyName, propertyDescription, propertyLocation, propertyType, bedrooms, bathrooms, price"
+                success: false,
+                message: "Missing required fields: propertyName, propertyDescription, propertyLocation, propertyType, bedrooms, bathrooms, price"
             });
         }
 
@@ -33,31 +36,34 @@ const createProperty = async (req, res) => {
             propertyDescription,
             propertyLocation,
             propertyType,
-            propertyOwner,
-            propertyAmenities,
+            propertyOwner: propertyOwner || null,
+            propertyAmenities: propertyAmenities || [],
             bedrooms,
             bathrooms,
-            livingArea,
-            assignedSales,
+            livingArea: livingArea || null,
+            assignedSales: assignedSales || null,
             price,
-            status,
-            gardenArea,
-            roofArea,
-            offers
+            status: status || 'Pending Review',
+            gardenArea: gardenArea || 0,
+            roofArea: roofArea || 0,
+            offers: offers || [],
+            images: images || []
         });
 
         return res.status(201).json({
+            success: true,
             message: "Property created successfully",
             data: property
         });
 
     } catch (error) {
         console.error("createProperty error:", error);
-        return res.status(500).json({ message: error.message });
+        return res.status(500).json({ 
+            success: false,
+            message: error.message 
+        });
     }
 };
-
-
 
 const getAllProperties = async (req, res) => {
     try {
@@ -66,17 +72,19 @@ const getAllProperties = async (req, res) => {
             .populate("assignedSales", "name email");
 
         return res.status(200).json({
+            success: true,
             count: properties.length,
             data: properties
         });
 
     } catch (error) {
         console.error("getAllProperties error:", error);
-        return res.status(500).json({ message: error.message });
+        return res.status(500).json({ 
+            success: false,
+            message: error.message 
+        });
     }
 };
-
-
 
 const getPropertyById = async (req, res) => {
     try {
@@ -87,18 +95,25 @@ const getPropertyById = async (req, res) => {
             .populate("assignedSales", "name email");
 
         if (!property) {
-            return res.status(404).json({ message: "Property not found" });
+            return res.status(404).json({ 
+                success: false,
+                message: "Property not found" 
+            });
         }
 
-        return res.status(200).json({ data: property });
+        return res.status(200).json({ 
+            success: true,
+            data: property 
+        });
 
     } catch (error) {
         console.error("getPropertyById error:", error);
-        return res.status(500).json({ message: error.message });
+        return res.status(500).json({ 
+            success: false,
+            message: error.message 
+        });
     }
 };
-
-
 
 const updateProperty = async (req, res) => {
     try {
@@ -107,7 +122,7 @@ const updateProperty = async (req, res) => {
         const ALLOWED_UPDATES = [
             "propertyName", "propertyDescription", "propertyLocation",
             "propertyType", "propertyAmenities", "bedrooms", "bathrooms",
-            "livingArea", "assignedSales", "price", "gardenArea", "roofArea"
+            "livingArea", "assignedSales", "price", "gardenArea", "roofArea", "images"
         ];
 
         const updates = {};
@@ -116,7 +131,10 @@ const updateProperty = async (req, res) => {
         });
 
         if (Object.keys(updates).length === 0) {
-            return res.status(400).json({ message: "No valid fields provided to update" });
+            return res.status(400).json({ 
+                success: false,
+                message: "No valid fields provided to update" 
+            });
         }
 
         const updatedProperty = await Property.findByIdAndUpdate(
@@ -126,22 +144,27 @@ const updateProperty = async (req, res) => {
         );
 
         if (!updatedProperty) {
-            return res.status(404).json({ message: "Property not found" });
+            return res.status(404).json({ 
+                success: false,
+                message: "Property not found" 
+            });
         }
 
         return res.status(200).json({
+            success: true,
             message: "Property updated successfully",
             data: updatedProperty
         });
 
     } catch (error) {
         console.error("updateProperty error:", error);
-        return res.status(500).json({ message: error.message });
+        return res.status(500).json({ 
+            success: false,
+            message: error.message 
+        });
     }
 };
 
-
-// DELETE PROPERTY
 const deleteProperty = async (req, res) => {
     try {
         const { id } = req.params;
@@ -149,32 +172,43 @@ const deleteProperty = async (req, res) => {
         const deletedProperty = await Property.findByIdAndDelete(id);
 
         if (!deletedProperty) {
-            return res.status(404).json({ message: "Property not found" });
+            return res.status(404).json({ 
+                success: false,
+                message: "Property not found" 
+            });
         }
 
-        return res.status(200).json({ message: "Property deleted successfully" });
+        return res.status(200).json({ 
+            success: true,
+            message: "Property deleted successfully" 
+        });
 
     } catch (error) {
         console.error("deleteProperty error:", error);
-        return res.status(500).json({ message: error.message });
+        return res.status(500).json({ 
+            success: false,
+            message: error.message 
+        });
     }
 };
 
-
-// CHANGE STATUS
 const changeStatus = async (req, res) => {
     try {
         const { id } = req.params;
         const { status } = req.body;
 
-        const ALLOWED_STATUSES = ["Available", "Sold", "Pending", "Rented"];
+        const ALLOWED_STATUSES = ["Available", "Sold", "Pending Review", "Rejected"];
 
         if (!status) {
-            return res.status(400).json({ message: "Status field is required" });
+            return res.status(400).json({ 
+                success: false,
+                message: "Status field is required" 
+            });
         }
 
         if (!ALLOWED_STATUSES.includes(status)) {
             return res.status(400).json({
+                success: false,
                 message: `Invalid status. Allowed values: ${ALLOWED_STATUSES.join(", ")}`
             });
         }
@@ -182,23 +216,29 @@ const changeStatus = async (req, res) => {
         const property = await Property.findById(id);
 
         if (!property) {
-            return res.status(404).json({ message: "Property not found" });
+            return res.status(404).json({ 
+                success: false,
+                message: "Property not found" 
+            });
         }
 
-        await property.changeStatus(status);
+        property.status = status;
+        await property.save();
 
         return res.status(200).json({
+            success: true,
             message: "Status updated successfully",
             data: property
         });
 
     } catch (error) {
         console.error("changeStatus error:", error);
-        return res.status(500).json({ message: error.message });
+        return res.status(500).json({ 
+            success: false,
+            message: error.message 
+        });
     }
 };
-
-
 
 const addImage = async (req, res) => {
     try {
@@ -206,32 +246,45 @@ const addImage = async (req, res) => {
         const { image } = req.body;
 
         if (!image) {
-            return res.status(400).json({ message: "Image URL is required" });
+            return res.status(400).json({ 
+                success: false,
+                message: "Image data is required" 
+            });
         }
 
         const property = await Property.findById(id);
 
         if (!property) {
-            return res.status(404).json({ message: "Property not found" });
+            return res.status(404).json({ 
+                success: false,
+                message: "Property not found" 
+            });
         }
 
-        await property.addImage(image);
+        if (!property.images) {
+            property.images = [];
+        }
+        
+        property.images.push(image);
+        await property.save();
 
         return res.status(200).json({
+            success: true,
             message: "Image added successfully",
             data: property
         });
 
     } catch (error) {
         console.error("addImage error:", error);
-        return res.status(500).json({ message: error.message });
+        return res.status(500).json({ 
+            success: false,
+            message: error.message 
+        });
     }
 };
 
-// SEARCH PROPERTIES
 const searchProperties = async (req, res) => {
     try {
-
         const {
             propertyLocation,
             propertyType,
@@ -244,7 +297,6 @@ const searchProperties = async (req, res) => {
 
         let filter = {};
 
-        // LOCATION SEARCH
         if (propertyLocation) {
             filter.propertyLocation = {
                 $regex: propertyLocation,
@@ -252,27 +304,22 @@ const searchProperties = async (req, res) => {
             };
         }
 
-        // PROPERTY TYPE
         if (propertyType) {
             filter.propertyType = propertyType;
         }
 
-        // STATUS
         if (status) {
             filter.status = status;
         }
 
-        // BEDROOMS
         if (bedrooms) {
             filter.bedrooms = Number(bedrooms);
         }
 
-        // BATHROOMS
         if (bathrooms) {
             filter.bathrooms = Number(bathrooms);
         }
 
-        // PRICE FILTER
         if (minPrice || maxPrice) {
             filter.price = {};
 
@@ -290,15 +337,16 @@ const searchProperties = async (req, res) => {
             .populate("assignedSales", "name email");
 
         return res.status(200).json({
+            success: true,
             count: properties.length,
             data: properties
         });
 
     } catch (error) {
         console.error("searchProperties error:", error);
-
-        return res.status(500).json({
-            message: error.message
+        return res.status(500).json({ 
+            success: false,
+            message: error.message 
         });
     }
 };
