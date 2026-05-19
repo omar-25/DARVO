@@ -2,55 +2,56 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Auth.css';
 
-function Login() {
+function Signup() {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  const handleLogin = async (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setError('');
     setSuccess('');
 
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    setLoading(true);
+
     try {
-      const response = await fetch('/login', {
+      const response = await fetch('/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          email: email,
-          password: password,
+          name,
+          email,
+          password,
         }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        setError(data.message || 'Login failed');
+        setError(data.message || 'Signup failed');
         return;
       }
 
-      // Store token in localStorage
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.data));
-      
-      setSuccess(data.message);
+      setSuccess('Account created successfully. Redirecting to login...');
+      setName('');
       setEmail('');
       setPassword('');
+      setConfirmPassword('');
 
-      // Optionally redirect after successful login
-      const user = data.data;
       setTimeout(() => {
-      if (user.role === 'admin') {
-        window.location.href = '/admin/properties';
-      } else {
-        window.location.href = '/';
-      }
-}, 1500);
+        window.location.href = '/login';
+      }, 1700);
     } catch (err) {
       setError('Network error: ' + err.message);
     } finally {
@@ -61,12 +62,24 @@ function Login() {
   return (
     <div className="auth-container">
       <div className="auth-box">
-        <h1>Login</h1>
-        
+        <h1>Create Account</h1>
+
         {error && <div className="error-message">{error}</div>}
         {success && <div className="success-message">{success}</div>}
 
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleSignup}>
+          <div className="form-group">
+            <label htmlFor="name">Full Name</label>
+            <input
+              type="text"
+              id="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Enter your full name"
+              required
+            />
+          </div>
+
           <div className="form-group">
             <label htmlFor="email">Email</label>
             <input
@@ -86,22 +99,34 @@ function Login() {
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
+              placeholder="Enter a password"
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="confirmPassword">Confirm Password</label>
+            <input
+              type="password"
+              id="confirmPassword"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="Confirm your password"
               required
             />
           </div>
 
           <button type="submit" disabled={loading}>
-            {loading ? 'Logging in...' : 'Login'}
+            {loading ? 'Creating account...' : 'Sign up'}
           </button>
         </form>
 
         <p className="signup-link">
-          Don't have an account? <Link to="/signup">Sign up</Link>
+          Already have an account? <Link to="/login">Login</Link>
         </p>
       </div>
     </div>
   );
 }
 
-export default Login;
+export default Signup;
