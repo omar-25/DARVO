@@ -10,8 +10,8 @@ const PropertySchema = new mongoose.Schema({
         required: true
     },
     price: {
-    type: Number,
-    required: true
+        type: Number,
+        required: true
     },
     propertyLocation: {
         type: String,
@@ -45,7 +45,7 @@ const PropertySchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum:['Available','Sold','Pending Review','Rejected'],
+        enum: ['Available', 'Sold', 'Pending Review', 'Rejected'],
         default: "Pending Review"
     },
     gardenArea: {
@@ -57,12 +57,17 @@ const PropertySchema = new mongoose.Schema({
         default: 0
     },
     
+    // ✅ Images will be stored as Base64 strings in MongoDB
+    images: [{
+        type: String  // This will store Base64 image data
+    }],
+    
     offers: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Offer"
     }],
-    rejectionReason:{
-        type:String,
+    rejectionReason: {
+        type: String,
     }
 }, { timestamps: true });
 
@@ -77,6 +82,9 @@ PropertySchema.methods.changeStatus = function(newStatus) {
 };
 
 PropertySchema.methods.addImage = function(imageUrl) {
+    if (!this.images) {
+        this.images = [];
+    }
     this.images.push(imageUrl);
     return this.save();
 };
