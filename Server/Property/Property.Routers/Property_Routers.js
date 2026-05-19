@@ -30,5 +30,6 @@ router.put("/status/:id", propertyController.changeStatus);
 
 router.put("/add-image/:id", propertyController.addImage);
 
+router.get("/compare/:idA/:idB", propertyController.compareProperties);
 
 module.exports = router;

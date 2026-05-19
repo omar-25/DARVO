@@ -61,7 +61,7 @@ const createProperty = async (req, res) => {
 
 const getAllProperties = async (req, res) => {
     try {
-        const properties = await Property.find({})
+        const properties = await Property.find({status: 'Available'})
             .populate("propertyOwner", "name email")
             .populate("assignedSales", "name email");
 
@@ -303,6 +303,26 @@ const searchProperties = async (req, res) => {
     }
 };
 
+const compareProperties = async (req, res) => {
+    try {
+        const [propA, propB] = await Promise.all([
+            Property.findById(req.params.idA),
+            Property.findById(req.params.idB),
+        ]);
+
+        if (!propA || !propB) {
+            return res.status(404).json({ message: 'One or both properties not found' });
+        }
+
+        const result = propA.compareWith(propB);
+        res.status(200).json({ data: result });
+
+    } catch (error) {
+        console.error("compareProperties error:", error);
+        return res.status(500).json({ message: error.message });
+    }
+};
+
 
 module.exports = {
     createProperty,
@@ -312,5 +332,6 @@ module.exports = {
     deleteProperty,
     searchProperties,
     changeStatus,
-    addImage
+    addImage,
+    compareProperties
 };

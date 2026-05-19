@@ -19,7 +19,6 @@ function ToastContainer({ toasts }) {
   );
 }
 
-// ── Rejection reason modal ───────────────────────────────────────────────────
 function RejectModal({ onConfirm, onCancel }) {
   const [reason, setReason] = useState('');
 
@@ -53,7 +52,7 @@ function RejectModal({ onConfirm, onCancel }) {
             }}
             disabled={!reason.trim()}
           >
-            ✕ Confirm Reject
+            Confirm Reject
           </button>
         </div>
       </div>
@@ -153,10 +152,10 @@ function PropertyModal({ property, onClose, onAccept, onReject }) {
 
         <div className="modal-footer">
           <button className="btn-modal-accept" onClick={() => { onAccept(_id); onClose(); }}>
-            ✓ Accept Property
+            Accept Property
           </button>
           <button className="btn-modal-reject" onClick={() => { onReject(_id); onClose(); }}>
-            ✕ Reject Property
+            Reject Property
           </button>
         </div>
       </div>
@@ -165,12 +164,12 @@ function PropertyModal({ property, onClose, onAccept, onReject }) {
 }
 
 function PendingProperties() {
-  const [properties, setProperties]     = useState([]);
-  const [loading, setLoading]           = useState(true);
-  const [error, setError]               = useState('');
-  const [selected, setSelected]         = useState(null);
-  const [toasts, setToasts]             = useState([]);
-  const [rejectingId, setRejectingId]   = useState(null); // ID of property being rejected
+  const [properties, setProperties] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [selected, setSelected] = useState(null);
+  const [toasts, setToasts] = useState([]);
+  const [rejectingId, setRejectingId] = useState(null);
 
   useEffect(() => {
     const handler = e => { if (e.key === 'Escape') { setSelected(null); setRejectingId(null); } };
@@ -179,24 +178,41 @@ function PendingProperties() {
   }, []);
 
   useEffect(() => {
-    (async () => {
-      try {
-        const res = await fetch(`${API_BASE}/admin/getPendingProperties`, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-          },
-        });
-        if (!res.ok) throw new Error(`Server error ${res.status}`);
-        const data = await res.json();
-        setProperties(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    })();
+    fetchPendingProperties();
   }, []);
+
+  const fetchPendingProperties = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      console.log('Fetching pending properties...');
+      console.log('Token:', token);
+      
+      const response = await fetch(`${API_BASE}/admin/getPendingProperties`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      
+      console.log('Response status:', response.status);
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Error response:', errorText);
+        throw new Error(`Server error ${response.status}: ${errorText}`);
+      }
+      
+      const data = await response.json();
+      console.log('Properties received:', data);
+      setProperties(data);
+    } catch (err) {
+      console.error('Fetch error:', err);
+      setError(err.message);
+      showToast('Failed to load properties: ' + err.message, 'reject');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const showToast = useCallback((message, type) => {
     const id = Date.now();
@@ -205,41 +221,97 @@ function PendingProperties() {
   }, []);
 
   const handleAccept = useCallback(async (id) => {
+    console.log('========== ACCEPTING PROPERTY ==========');
+    console.log('Property ID:', id);
+    
     try {
-      const res = await fetch(`${API_BASE}/admin/property/${id}/approve`, {
+      const token = localStorage.getItem('token');
+      console.log('Token exists:', token ? 'YES' : 'NO');
+      
+      const url = `${API_BASE}/admin/property/${id}/approve`;
+      console.log('Request URL:', url);
+      
+      const requestBody = { status: 'Available' };
+      console.log('Request body:', requestBody);
+      
+      const response = await fetch(url, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({ status: 'Available' }),
+        body: JSON.stringify(requestBody),
       });
-      if (!res.ok) throw new Error(`Server error ${res.status}`);
+      
+      console.log('Response status:', response.status);
+      console.log('Response status text:', response.statusText);
+      
+      const responseData = await response.json();
+      console.log('Response data:', responseData);
+      
+      if (!response.ok) {
+        throw new Error(responseData.message || `Server error ${response.status}`);
+      }
+      
       setProperties(prev => prev.filter(p => p._id !== id));
-      showToast('✓ Property accepted', 'accept');
+      showToast('Property accepted successfully!', 'accept');
+      console.log('========== ACCEPT SUCCESSFUL ==========');
     } catch (err) {
-      showToast('Action failed — please try again.', 'reject');
-      console.error(err);
+      console.error('========== ACCEPT ERROR ==========');
+      console.error('Error name:', err.name);
+      console.error('Error message:', err.message);
+      console.error('Full error:', err);
+      showToast(`Action failed: ${err.message}`, 'reject');
     }
   }, [showToast]);
 
   const handleReject = useCallback(async (id, reason) => {
+    console.log('========== REJECTING PROPERTY ==========');
+    console.log('Property ID:', id);
+    console.log('Rejection reason:', reason);
+    
     try {
-      const res = await fetch(`${API_BASE}/admin/property/${id}/approve`, {
+      const token = localStorage.getItem('token');
+      console.log('Token exists:', token ? 'YES' : 'NO');
+      
+      const url = `${API_BASE}/admin/property/${id}/approve`;
+      console.log('Request URL:', url);
+      
+      const requestBody = { 
+        status: 'Rejected', 
+        rejectionReason: reason 
+      };
+      console.log('Request body:', requestBody);
+      
+      const response = await fetch(url, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({ status: 'Rejected', rejectionReason: reason }),
+        body: JSON.stringify(requestBody),
       });
-      if (!res.ok) throw new Error(`Server error ${res.status}`);
+      
+      console.log('Response status:', response.status);
+      console.log('Response status text:', response.statusText);
+      
+      const responseData = await response.json();
+      console.log('Response data:', responseData);
+      
+      if (!response.ok) {
+        throw new Error(responseData.message || `Server error ${response.status}`);
+      }
+      
       setProperties(prev => prev.filter(p => p._id !== id));
       setRejectingId(null);
-      showToast('✕ Property rejected', 'reject');
+      showToast('Property rejected successfully!', 'reject');
+      console.log('========== REJECT SUCCESSFUL ==========');
     } catch (err) {
-      showToast('Action failed — please try again.', 'reject');
-      console.error(err);
+      console.error('========== REJECT ERROR ==========');
+      console.error('Error name:', err.name);
+      console.error('Error message:', err.message);
+      console.error('Full error:', err);
+      showToast(`Action failed: ${err.message}`, 'reject');
     }
   }, [showToast]);
 
@@ -263,14 +335,13 @@ function PendingProperties() {
               key={p._id}
               property={p}
               onView={setSelected}
-              onAccept={id => handleAccept(id)}
+              onAccept={handleAccept}
               onReject={id => { setSelected(null); setRejectingId(id); }}
             />
           ))}
         </div>
       </div>
 
-      {/* Property detail modal */}
       {selected && (
         <PropertyModal
           property={selected}
@@ -280,7 +351,6 @@ function PendingProperties() {
         />
       )}
 
-      {/* Rejection reason modal */}
       {rejectingId && (
         <RejectModal
           onConfirm={reason => handleReject(rejectingId, reason)}
