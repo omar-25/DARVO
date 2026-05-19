@@ -23,7 +23,7 @@ const createProperty = async (req, res) => {
             images
         } = req.body;
 
-        // Check required fields
+  
         if (!propertyName || !propertyDescription || !propertyLocation || !propertyType || !bedrooms || !bathrooms || !price) {
             return res.status(400).json({
                 success: false,

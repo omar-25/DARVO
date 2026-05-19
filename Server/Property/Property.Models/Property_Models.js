@@ -57,9 +57,9 @@ const PropertySchema = new mongoose.Schema({
         default: 0
     },
     
-    // ✅ Images will be stored as Base64 strings in MongoDB
+
     images: [{
-        type: String  // This will store Base64 image data
+        type: String  
     }],
     
     offers: [{

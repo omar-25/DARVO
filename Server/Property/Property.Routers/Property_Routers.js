@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const propertyController = require('../Property.Controller/Property_Controller');
 
-// ✅ Test route first
+
 router.get('/test', (req, res) => {
     res.json({ message: 'Property routes are working!' });
 });

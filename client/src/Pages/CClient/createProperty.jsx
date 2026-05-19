@@ -18,7 +18,7 @@ const CreateProperty = ({ userId = '6765a8b3c4d5e6f7a8b9c0d1' }) => {
     gardenArea: '',
     roofArea: '',
     offers: [],
-    images: []  // Store Base64 images
+    images: []  
   });
 
   const [amenityInput, setAmenityInput] = useState('');
@@ -66,7 +66,7 @@ const CreateProperty = ({ userId = '6765a8b3c4d5e6f7a8b9c0d1' }) => {
     }));
   };
 
-  // Handle image selection and convert to Base64
+  
   const handleImageSelect = async (e) => {
     const files = Array.from(e.target.files);
     
@@ -128,7 +128,7 @@ const CreateProperty = ({ userId = '6765a8b3c4d5e6f7a8b9c0d1' }) => {
       if (!cleanData.roofArea) delete cleanData.roofArea;
       if (cleanData.offers.length === 0) delete cleanData.offers;
       
-      const response = await fetch('http://localhost:4000/api/properties/create', {
+      const response = await fetch('http://localhost:4000/property/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(cleanData)
