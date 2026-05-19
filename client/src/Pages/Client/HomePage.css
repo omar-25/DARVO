@@ -388,6 +388,13 @@
   box-shadow: 0 14px 28px rgba(46, 125, 50, 0.06);
 }
 
+/* Make the compare toolbar sticky so actions stay visible while scrolling */
+.compare-toolbar {
+  position: sticky;
+  top: 72px; /* adjust if header height changes */
+  z-index: 1200;
+}
+
 .compare-status {
   font-size: 1rem;
   color: #2e7d32;
@@ -514,114 +521,18 @@
     width: 100%;
     justify-content: center;
   }
-  /* Add these new button styles to your existing CSS */
-
-.advanced-search-btn {
-  background: #4caf50;
-  color: white;
-  border: none;
-  padding: 6px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.85rem;
-  font-weight: 500;
-  transition: background 0.2s;
-  margin-right: 12px;
-}
-
-.advanced-search-btn:hover {
-  background: #388e3c;
-}
-
-.hero-search-btn {
-  background: #ffffff;
-  color: #2e7d32;
-  border: 2px solid #4caf50;
-  padding: 12px 32px;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 24px;
-  transition: all 0.2s;
-}
-
-.hero-search-btn:hover {
-  background: #4caf50;
-  color: white;
-}
-
-.advanced-link-btn {
-  background: #4caf50;
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: background 0.2s;
-  white-space: nowrap;
-}
-
-.advanced-link-btn:hover {
-  background: #388e3c;
-}
-
-.empty-search-btn {
-  background: #4caf50;
-  color: white;
-  border: none;
-  padding: 10px 24px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  margin-top: 16px;
-  transition: background 0.2s;
-}
-
-.empty-search-btn:hover {
-  background: #388e3c;
-}
-
-/* Update existing search container for better layout */
-.search-container {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.search-input {
-  flex: 2;
-  min-width: 200px;
-}
-
-.filter-select {
-  flex: 1;
-  min-width: 150px;
-}
-
-.advanced-link-btn {
-  flex: 0 0 auto;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .user-info {
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  
   .advanced-search-btn {
     margin-right: 0;
     margin-bottom: 8px;
   }
-  
+
   .search-container {
     flex-direction: column;
   }
-  
-  .search-input, .filter-select, .advanced-link-btn {
+
+  .search-input,
+  .filter-select,
+  .advanced-link-btn {
     width: 100%;
   }
 }

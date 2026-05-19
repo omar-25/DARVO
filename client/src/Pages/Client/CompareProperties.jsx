@@ -67,13 +67,58 @@ function CompareProperties() {
   };
 
   const renderComparisonRows = () => {
-    return compareData.comparison.map((row) => (
-      <tr key={row.field} className={row.isDifferent ? 'row-different' : 'row-same'}>
-        <td>{row.label}</td>
-        <td>{formatValue(row.propertyA, row.label)}</td>
-        <td>{formatValue(row.propertyB, row.label)}</td>
-      </tr>
-    ));
+    return compareData.comparison.map((row) => {
+      const a = row.propertyA ?? null;
+      const b = row.propertyB ?? null;
+
+      const renderPrimitive = (val, otherVal, label, side) => {
+        if (val === null || val === undefined || val === '') return <span className="value-empty">Not specified</span>;
+        if (label === 'Price' && typeof val === 'number') {
+          return (
+            <span className={row.isDifferent ? 'diff-value' : ''}>
+              {new Intl.NumberFormat('en-EG', { style: 'currency', currency: 'EGP', minimumFractionDigits: 0 }).format(val)}
+            </span>
+          );
+        }
+        return <span className={row.isDifferent ? 'diff-value' : ''}>{val}</span>;
+      };
+
+      const renderArray = (arr, otherArr, side) => {
+        const left = Array.isArray(arr) ? arr : [];
+        const right = Array.isArray(otherArr) ? otherArr : [];
+        const onlyThis = left.filter(x => !right.includes(x));
+
+        if (left.length === 0) return <span className="value-empty">None</span>;
+
+        return (
+          <div className="amenity-list">
+            {left.map(item => (
+              <span key={item} className={`amenity-tag ${onlyThis.includes(item) ? (side === 'A' ? 'only-a' : 'only-b') : ''}`}>
+                {item}
+              </span>
+            ))}
+          </div>
+        );
+      };
+
+      const labelCell = (
+        <div className="feature-label">
+          <span>{row.label}</span>
+          {row.countForTotal === false && <span className="not-counted">Not counted</span>}
+        </div>
+      );
+
+      const leftCell = Array.isArray(a) || Array.isArray(b) ? renderArray(a, b, 'A') : renderPrimitive(a, b, row.label, 'A');
+      const rightCell = Array.isArray(a) || Array.isArray(b) ? renderArray(b, a, 'B') : renderPrimitive(b, a, row.label, 'B');
+
+      return (
+        <tr key={row.field} className={row.isDifferent ? 'row-different' : 'row-same'}>
+          <td>{labelCell}</td>
+          <td>{leftCell}</td>
+          <td>{rightCell}</td>
+        </tr>
+      );
+    });
   };
 
   if (loading) {

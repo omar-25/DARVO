@@ -135,6 +135,36 @@
   border: 1px solid #c8e6c9;
 }
 
+.amenity-tag.only-a {
+  background: #e3f2fd;
+  color: #0d47a1;
+  border-color: #bbdefb;
+}
+
+.amenity-tag.only-b {
+  background: #fff3e0;
+  color: #bf360c;
+  border-color: #ffcc80;
+}
+
+.diff-value {
+  background: rgba(255, 205, 210, 0.25);
+  padding: 4px 6px;
+  border-radius: 6px;
+  font-weight: 700;
+  color: #b71c1c;
+}
+
+.not-counted {
+  margin-left: 8px;
+  font-size: 0.7rem;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #f1f8f1;
+  color: #2e7d32;
+  border: 1px solid #d9edd9;
+}
+
 .value-empty {
   color: #737373;
   font-style: italic;

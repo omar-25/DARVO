@@ -91,7 +91,7 @@ PropertySchema.methods.addImage = function(imageUrl) {
 };
 PropertySchema.methods.compareWith = function(otherProperty) {
     const fields = [
-        { key: 'propertyName',        label: 'Property Name' },
+        { key: 'propertyName',        label: 'Property Name', countForTotal: false },
         { key: 'propertyType',        label: 'Type' },
         { key: 'propertyLocation',    label: 'Location' },
         { key: 'price',               label: 'Price' },
@@ -104,7 +104,7 @@ PropertySchema.methods.compareWith = function(otherProperty) {
         { key: 'propertyDescription', label: 'Description' },
     ];
 
-    const comparison = fields.map(({ key, label }) => {
+    const comparison = fields.map(({ key, label, countForTotal = true }) => {
         const valA = this[key];
         const valB = otherProperty[key];
         return {
@@ -113,6 +113,7 @@ PropertySchema.methods.compareWith = function(otherProperty) {
             propertyA: valA ?? null,
             propertyB: valB ?? null,
             isDifferent: JSON.stringify(valA) !== JSON.stringify(valB),
+            countForTotal: countForTotal,
         };
     });
 
@@ -130,7 +131,7 @@ PropertySchema.methods.compareWith = function(otherProperty) {
     return {
         propertyA: { id: this._id, name: this.propertyName },
         propertyB: { id: otherProperty._id, name: otherProperty.propertyName },
-        totalDifferences: comparison.filter(c => c.isDifferent).length,
+        totalDifferences: comparison.filter(c => c.isDifferent && c.countForTotal !== false).length,
         comparison,
     };
 };
