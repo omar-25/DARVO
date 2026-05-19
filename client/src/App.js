@@ -5,6 +5,7 @@ import Signup from './pages/Signup';
 import PendingProperties from './pages/admin/PendingProperties';
 import CreateProperty from './pages/CClient/createProperty';
 import Homepage from './pages/Client/HomePage';
+import CompareProperties from './pages/Client/CompareProperties';
 import AdvancedFilterPage from './pages/Client/AdvancedFilterPage';
 import PropertyDetails from './pages/Client/PropertyDetails';
 
@@ -17,6 +18,7 @@ function App() {
         <Route path="/create-property" element={<CreateProperty />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/compare/:idA/:idB" element={<CompareProperties />} />
         <Route path="/advanced-filter" element={<AdvancedFilterPage />} />
         <Route path="/property/:id" element={<PropertyDetails />} />
       </Routes>
