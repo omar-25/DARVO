@@ -122,6 +122,7 @@ function Homepage() {
             <option value="Townhouse">Townhouses</option>
             <option value="Land">Land</option>
             <option value="Commercial">Commercial</option>
+            <option value="Studio">Studios</option>
           </select>
 
           <button onClick={handleAdvancedSearch} className="advanced-filters-btn">

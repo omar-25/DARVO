@@ -42,9 +42,14 @@ function Login() {
       setPassword('');
 
       // Optionally redirect after successful login
+      const user = data.data;
       setTimeout(() => {
-        window.location.href = '/'; // Change this to your desired route
-      }, 1500);
+      if (user.role === 'admin') {
+        window.location.href = '/admin/properties';
+      } else {
+        window.location.href = '/';
+      }
+}, 1500);
     } catch (err) {
       setError('Network error: ' + err.message);
     } finally {
