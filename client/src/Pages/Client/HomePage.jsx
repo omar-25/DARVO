@@ -10,6 +10,8 @@ function Homepage() {
   const [user, setUser] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('all');
+  const [compareSelection, setCompareSelection] = useState([]);
+  const [compareError, setCompareError] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,6 +54,34 @@ function Homepage() {
 
   const handleAdvancedSearch = () => {
     navigate('/advanced-filter');
+  };
+
+  const toggleCompare = (propertyId) => {
+    setCompareError('');
+    setCompareSelection((prev) => {
+      if (prev.includes(propertyId)) {
+        return prev.filter((id) => id !== propertyId);
+      }
+      if (prev.length >= 2) {
+        setCompareError('Please select only two properties to compare.');
+        return prev;
+      }
+      return [...prev, propertyId];
+    });
+  };
+
+  const clearCompareSelection = () => {
+    setCompareSelection([]);
+    setCompareError('');
+  };
+
+  const handleCompareNow = () => {
+    if (compareSelection.length !== 2) {
+      setCompareError('Select two properties to compare.');
+      return;
+    }
+
+    navigate(`/compare/${compareSelection[0]}/${compareSelection[1]}`);
   };
 
   // Function to handle view details button click
@@ -131,6 +161,27 @@ function Homepage() {
         </div>
       </div>
 
+      {compareSelection.length > 0 && (
+        <div className="compare-toolbar">
+          <div className="compare-status">
+            <strong>{compareSelection.length}/2</strong> selected for comparison
+          </div>
+          <div className="compare-actions">
+            <button className="clear-compare-btn" onClick={clearCompareSelection}>
+              Clear selection
+            </button>
+            <button
+              className="compare-now-btn"
+              onClick={handleCompareNow}
+              disabled={compareSelection.length !== 2}
+            >
+              Compare now
+            </button>
+          </div>
+        </div>
+      )}
+      {compareError && <div className="compare-error-message">{compareError}</div>}
+
       {/* Properties Grid */}
       <div className="properties-section">
         <div className="properties-container">
@@ -158,7 +209,7 @@ function Homepage() {
           ) : (
             <div className="properties-grid">
               {filteredProperties.map(property => (
-                <div key={property._id} className="property-card">
+                <div key={property._id} className={`property-card ${compareSelection.includes(property._id) ? 'selected-card' : ''}`}>
                   <div className="property-image">
                     {property.images && property.images[0] ? (
                       <img src={property.images[0]} alt={property.propertyName} />
@@ -172,7 +223,7 @@ function Homepage() {
                       <span className="rent-badge">For Rent</span>
                     )}
                   </div>
-                  
+
                   <div className="property-info">
                     <h3 className="property-title">{property.propertyName}</h3>
                     <p className="property-location">{property.propertyLocation}</p>
@@ -187,14 +238,21 @@ function Homepage() {
                     <div className="property-type">
                       {property.propertyType}
                     </div>
-                    
-                    {/* Working View Details Button */}
-                    <button 
-                      className="view-details-btn"
-                      onClick={() => handleViewDetails(property._id)}
-                    >
-                      View Details
-                    </button>
+
+                    <div className="card-actions">
+                      <button 
+                        className="view-details-btn"
+                        onClick={() => handleViewDetails(property._id)}
+                      >
+                        View Details
+                      </button>
+                      <button
+                        className={`compare-btn ${compareSelection.includes(property._id) ? 'selected' : ''}`}
+                        onClick={() => toggleCompare(property._id)}
+                      >
+                        {compareSelection.includes(property._id) ? 'Remove' : 'Compare'}
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}
