@@ -22,6 +22,13 @@ body {
   position: sticky;
   top: 0;
   z-index: 10;
+  gap: 20px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .admin-header h1 {
@@ -29,6 +36,7 @@ body {
   font-weight: 800;
   color: #1b5e20;
   letter-spacing: -0.02em;
+  margin: 0;
 }
 
 .admin-header h1 span {
@@ -44,6 +52,47 @@ body {
   border-radius: 20px;
   letter-spacing: 0.04em;
 }
+
+#size {
+  justify-content: flex-end;
+  padding: auto;
+  color : #c62828;
+  border-radius:30% ;
+}
+
+#logout-btn {
+  background: #c62828;
+  color: white;
+  border: 1px solid #ffcdd2;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: filter 0.15s, transform 0.1s;
+}
+
+#logout-btn:hover {
+  filter: brightness(0.95);
+  background-color: red;
+}
+
+.add-user-btn {
+  background: linear-gradient(135deg, #43a047 0%, #66bb6a 100%);
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  white-space: nowrap;
+}
+
+.add-user-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(76, 175, 80, 0.3);
+}
+
 
 /* ── Page body ── */
 .admin-body {

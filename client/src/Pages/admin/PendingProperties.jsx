@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './PendingProperties.css';
 
 const API_BASE = 'http://localhost:4000';
@@ -164,6 +165,7 @@ function PropertyModal({ property, onClose, onAccept, onReject }) {
 }
 
 function PendingProperties() {
+  const navigate = useNavigate();
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -318,8 +320,22 @@ function PendingProperties() {
   return (
     <>
       <header className="admin-header">
-        <h1>Prop<span>Admin</span></h1>
-        <span className="header-badge">{properties.length} Pending</span>
+        <div className="header-left">
+          <h1>Prop<span>Admin</span></h1>
+          <span className="header-badge">{properties.length} Pending</span>
+        </div>
+        <button className="add-user-btn" onClick={() => navigate('/admin/add-user')}>
+          + Add User
+        </button>
+          <div id ="size">
+          <button id="logout-btn" onClick={() => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            navigate('/login');
+          }}>
+            Logout
+          </button>
+        </div>
       </header>
 
       <div className="admin-body">
