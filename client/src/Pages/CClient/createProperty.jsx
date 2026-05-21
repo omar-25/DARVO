@@ -18,7 +18,7 @@ const CreateProperty = ({ userId = '6765a8b3c4d5e6f7a8b9c0d1' }) => {
     gardenArea: '',
     roofArea: '',
     offers: [],
-    images: []  
+    images: []
   });
 
   const [amenityInput, setAmenityInput] = useState('');
@@ -29,7 +29,6 @@ const CreateProperty = ({ userId = '6765a8b3c4d5e6f7a8b9c0d1' }) => {
 
   const propertyTypes = ['Apartment', 'House', 'Villa', 'Townhouse', 'Land', 'Commercial', 'Studio'];
 
-  // Convert file to Base64
   const convertToBase64 = (file) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -50,7 +49,7 @@ const CreateProperty = ({ userId = '6765a8b3c4d5e6f7a8b9c0d1' }) => {
   };
 
   const addAmenity = () => {
-    if (amenityInput.trim()) {
+    if (amenityInput && amenityInput.trim() !== '') {
       setFormData(prev => ({
         ...prev,
         propertyAmenities: [...prev.propertyAmenities, amenityInput.trim()]
@@ -66,7 +65,6 @@ const CreateProperty = ({ userId = '6765a8b3c4d5e6f7a8b9c0d1' }) => {
     }));
   };
 
-  
   const handleImageSelect = async (e) => {
     const files = Array.from(e.target.files);
     
@@ -142,7 +140,6 @@ const CreateProperty = ({ userId = '6765a8b3c4d5e6f7a8b9c0d1' }) => {
       
       setSuccess('Property created successfully! Your property will be reviewed by admin.');
       
-      // Reset form
       setFormData({
         propertyName: '',
         propertyDescription: '',
@@ -165,6 +162,10 @@ const CreateProperty = ({ userId = '6765a8b3c4d5e6f7a8b9c0d1' }) => {
       setAmenityInput('');
       
       window.scrollTo(0, 0);
+      
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 2000);
       
     } catch (err) {
       console.error('Error creating property:', err);
@@ -334,7 +335,6 @@ const CreateProperty = ({ userId = '6765a8b3c4d5e6f7a8b9c0d1' }) => {
                   value={formData.price}
                   onChange={handleNumberChange}
                   min="0"
-                  
                   placeholder="Enter price"
                   className="form-input"
                 />
@@ -342,35 +342,123 @@ const CreateProperty = ({ userId = '6765a8b3c4d5e6f7a8b9c0d1' }) => {
             </div>
           </div>
 
+          {/* Amenities Section - FIXED WORKING VERSION */}
           <div className="form-section">
             <h2>Amenities</h2>
-            <div className="amenities-section">
-              <div className="amenities-input-group">
+            
+            <div style={{ marginBottom: '20px' }}>
+              <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
                 <input
                   type="text"
                   value={amenityInput}
                   onChange={(e) => setAmenityInput(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addAmenity())}
-                  placeholder="e.g., Swimming Pool, Gym, Parking"
-                  className="form-input"
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      addAmenity();
+                    }
+                  }}
+                  placeholder="Type amenity (e.g., Swimming Pool, Gym, Parking)"
+                  style={{
+                    flex: 1,
+                    minWidth: '200px',
+                    padding: '12px 16px',
+                    border: '2px solid #4caf50',
+                    borderRadius: '8px',
+                    fontSize: '16px',
+                    backgroundColor: '#ffffff',
+                    color: '#333333',
+                    outline: 'none'
+                  }}
                 />
-                <button type="button" onClick={addAmenity} className="add-btn">
-                  Add Amenity
+                <button
+                  type="button"
+                  onClick={addAmenity}
+                  style={{
+                    padding: '12px 24px',
+                    background: '#4caf50',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                    fontWeight: 'bold',
+                    fontSize: '14px'
+                  }}
+                  onMouseEnter={(e) => e.target.style.background = '#388e3c'}
+                  onMouseLeave={(e) => e.target.style.background = '#4caf50'}
+                >
+                  + Add Amenity
                 </button>
               </div>
-              
-              <div className="amenities-list">
-                {formData.propertyAmenities.map((amenity, index) => (
-                  <span key={index} className="amenity-tag">
-                    {amenity}
-                    <button type="button" onClick={() => removeAmenity(index)} className="remove-amenity">×</button>
-                  </span>
-                ))}
-              </div>
+            </div>
+            
+            <div style={{ 
+              display: 'flex', 
+              flexWrap: 'wrap', 
+              gap: '10px', 
+              padding: '15px', 
+              background: '#f9f9f9', 
+              borderRadius: '8px',
+              minHeight: '80px',
+              border: '1px dashed #ddd'
+            }}>
+              {formData.propertyAmenities && formData.propertyAmenities.length > 0 ? (
+                formData.propertyAmenities.map((amenity, index) => (
+                  <div
+                    key={index}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      background: '#e8f5e9',
+                      color: '#2e7d32',
+                      padding: '6px 12px',
+                      borderRadius: '20px',
+                      fontSize: '14px',
+                      fontWeight: '500'
+                    }}
+                  >
+                    <span>{amenity}</span>
+                    <button
+                      type="button"
+                      onClick={() => removeAmenity(index)}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        fontSize: '18px',
+                        fontWeight: 'bold',
+                        color: '#ef5350',
+                        padding: '0 4px',
+                        borderRadius: '50%',
+                        width: '22px',
+                        height: '22px',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.target.style.background = '#ef5350';
+                        e.target.style.color = 'white';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.background = 'none';
+                        e.target.style.color = '#ef5350';
+                      }}
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))
+              ) : (
+                <div style={{ width: '100%', textAlign: 'center', color: '#999', padding: '20px' }}>
+                  No amenities added yet. Add swimming pool, gym, parking, etc.
+                </div>
+              )}
             </div>
           </div>
 
-          {/* Image Upload Section - Saves directly to database */}
+          {/* Image Upload Section */}
           <div className="form-section">
             <h2>Property Images</h2>
             <div className="images-section">
