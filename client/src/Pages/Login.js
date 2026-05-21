@@ -48,7 +48,7 @@ function Login() {
       if (user.role === 'admin') {
         window.location.href = '/admin/properties';
       } else {
-        window.location.href = '/';
+        window.location.href = '/home';
       }
 }, 1500);
     } catch (err) {

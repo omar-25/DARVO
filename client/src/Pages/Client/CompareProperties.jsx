@@ -133,7 +133,7 @@ function CompareProperties() {
     return (
       <div className="compare-page">
         <div className="compare-error">{error}</div>
-        <button className="return-btn" onClick={() => navigate('/')}>Back to search</button>
+        <button className="return-btn" onClick={() => navigate('/home')}>Back to search</button>
       </div>
     );
   }

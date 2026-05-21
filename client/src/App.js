@@ -17,7 +17,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Homepage />} />
+        <Route path="/" element={<Login />} />
+        <Route path="/home" element={<Homepage />} />
         <Route path="/admin/properties" element={<PendingProperties />} />
         <Route path="/admin/add-user" element={<AddUser />} />
         <Route path="/admin/update-user/:id" element={<UpdateUser />} />
