@@ -332,13 +332,13 @@ function PendingProperties() {
             className="update-user-btn"
             onClick={() => navigate('/admin/manage-users')}
           >
-            ✎ Update User
+            ✎ Manage Users
           </button>
           <button
             className="delete-user-btn"
-            onClick={() => navigate('/admin/manage-users')}
+            onClick={() => navigate('/admin/delete-property')}
           >
-            🗑 Delete User
+            🗑 Delete Property
           </button>
         </div>
           <div id ="size">
