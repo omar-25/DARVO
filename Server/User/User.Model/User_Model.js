@@ -21,8 +21,8 @@ const UserSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['user', 'admin', 'sales'],
-    default: 'user'
+    enum: ['buyer', 'owner', 'admin', 'sales'],
+    default: 'buyer'
   },
   favorites: [{
     type: mongoose.Schema.Types.ObjectId,

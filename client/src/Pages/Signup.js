@@ -7,6 +7,7 @@ function Signup() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [role, setRole] = useState('buyer');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -33,6 +34,7 @@ function Signup() {
           name,
           email,
           password,
+          role,
         }),
       });
 
@@ -90,6 +92,32 @@ function Signup() {
               placeholder="Enter your email"
               required
             />
+          </div>
+
+          <div className="form-group">
+            <label>User type</label>
+            <div className="radio-group">
+              <label className="radio-label">
+                <input
+                  type="radio"
+                  name="role"
+                  value="buyer"
+                  checked={role === 'buyer'}
+                  onChange={() => setRole('buyer')}
+                />
+                Renter / Buyer
+              </label>
+              <label className="radio-label">
+                <input
+                  type="radio"
+                  name="role"
+                  value="owner"
+                  checked={role === 'owner'}
+                  onChange={() => setRole('owner')}
+                />
+                Owner
+              </label>
+            </div>
           </div>
 
           <div className="form-group">
