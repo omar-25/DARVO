@@ -334,6 +334,12 @@ function PendingProperties() {
           >
             ✎ Update User
           </button>
+          <button
+            className="delete-user-btn"
+            onClick={() => navigate('/admin/manage-users')}
+          >
+            🗑 Delete User
+          </button>
         </div>
           <div id ="size">
           <button id="logout-btn" onClick={() => {
