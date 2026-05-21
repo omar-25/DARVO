@@ -68,7 +68,7 @@ function PropertyDetails() {
     return (
       <div className="details-container">
         <div className="error-message">{error || 'Property not found'}</div>
-        <button onClick={() => navigate('/')} className="back-btn">Back to Home</button>
+        <button onClick={() => navigate('/home')} className="back-btn">Back to Home</button>
       </div>
     );
   }
@@ -80,7 +80,7 @@ function PropertyDetails() {
           <div className="logo">
             <h1>Darvo <span>Real Estate</span></h1>
           </div>
-          <button onClick={() => navigate('/')} className="back-arrow-btn" aria-label="Go back">
+          <button onClick={() => navigate('/home')} className="back-arrow-btn" aria-label="Go back">
             ←
           </button>        
 </div>
