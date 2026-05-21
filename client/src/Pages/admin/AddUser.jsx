@@ -11,7 +11,7 @@ function AddUser() {
     email: '',
     password: '',
     confirmPassword: '',
-    role: 'sales-agent'
+    role: 'buyer'
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -44,7 +44,7 @@ function AddUser() {
     setLoading(true);
 
     try {
-      const endpoint = formData.role === 'admin' ? '/admin/createAdmin' : '/admin/createSalesAgent';
+      const endpoint = '/admin/createUser';
       const token = localStorage.getItem('token');
 
       const response = await fetch(`${API_BASE}${endpoint}`, {
@@ -56,7 +56,8 @@ function AddUser() {
         body: JSON.stringify({
           name: formData.name,
           email: formData.email,
-          password: formData.password
+          password: formData.password,
+          role: formData.role
         })
       });
 
@@ -67,13 +68,13 @@ function AddUser() {
         return;
       }
 
-      setSuccess(`${formData.role === 'admin' ? 'Admin' : 'Sales Agent'} created successfully!`);
+      setSuccess(`${formData.role === 'owner' ? 'Owner' : 'Buyer'} created successfully!`);
       setFormData({
         name: '',
         email: '',
         password: '',
         confirmPassword: '',
-        role: 'sales-agent'
+        role: 'buyer'
       });
 
       setTimeout(() => {
@@ -117,8 +118,8 @@ function AddUser() {
                 onChange={handleChange}
                 className="form-select"
               >
-                <option value="sales-agent">Sales Agent</option>
-                <option value="admin">Admin</option>
+                <option value="buyer">Renter / Buyer</option>
+            <option value="owner">Owner</option>
               </select>
             </div>
 
