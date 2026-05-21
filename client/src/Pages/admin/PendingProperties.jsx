@@ -324,9 +324,17 @@ function PendingProperties() {
           <h1>Prop<span>Admin</span></h1>
           <span className="header-badge">{properties.length} Pending</span>
         </div>
-        <button className="add-user-btn" onClick={() => navigate('/admin/add-user')}>
-          + Add User
-        </button>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <button className="add-user-btn" onClick={() => navigate('/admin/add-user')}>
+            + Add User
+          </button>
+          <button
+            className="update-user-btn"
+            onClick={() => navigate('/admin/manage-users')}
+          >
+            ✎ Update User
+          </button>
+        </div>
           <div id ="size">
           <button id="logout-btn" onClick={() => {
             localStorage.removeItem('token');
