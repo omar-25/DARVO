@@ -56,6 +56,11 @@ function Homepage() {
     navigate('/advanced-filter');
   };
 
+  // ✅ Add this function to navigate to create property page
+  const handleCreateProperty = () => {
+    navigate('/create-property');
+  };
+
   const toggleCompare = (propertyId) => {
     setCompareError('');
     setCompareSelection((prev) => {
@@ -84,7 +89,6 @@ function Homepage() {
     navigate(`/compare/${compareSelection[0]}/${compareSelection[1]}`);
   };
 
-  // Function to handle view details button click
   const handleViewDetails = (propertyId) => {
     navigate(`/property/${propertyId}`);
   };
@@ -117,6 +121,14 @@ function Homepage() {
           <div className="user-info">
             <span className="user-name">Welcome, {user?.name || 'User'}!</span>
             <span className="user-role">{user?.role || 'Buyer'}</span>
+            
+            {/* ✅ Add this button for creating property */}
+            {(user?.role === 'property_owner' || user?.role === 'admin' || !user?.role) && (
+              <button onClick={handleCreateProperty} className="create-property-btn">
+                + List Property
+              </button>
+            )}
+            
             <button onClick={handleLogout} className="logout-btn">Logout</button>
           </div>
         </div>
@@ -127,9 +139,14 @@ function Homepage() {
         <div className="hero-content">
           <h2>Find Your Dream Property</h2>
           <p>Discover the perfect home, office, or investment property in Egypt</p>
+          {/* ✅ Add a call-to-action button in hero section */}
+          <button onClick={handleCreateProperty} className="hero-create-btn">
+            List Your Property
+          </button>
         </div>
       </section>
 
+      {/* Rest of your component remains the same */}
       {/* Search & Filter Bar */}
       <div className="search-section">
         <div className="search-container">
