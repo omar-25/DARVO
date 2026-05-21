@@ -9,6 +9,8 @@ import AdvancedFilterPage from './Pages/Client/AdvancedFilterPage';
 import PropertyDetails from './Pages/Client/PropertyDetails';
 import CompareProperties from './Pages/Client/CompareProperties';
 import AddUser from './Pages/admin/AddUser';
+import UpdateUser from './Pages/admin/UpdateUser';
+import ManageUsers from './Pages/admin/ManageUsers';
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
         <Route path="/" element={<Homepage />} />
         <Route path="/admin/properties" element={<PendingProperties />} />
         <Route path="/admin/add-user" element={<AddUser />} />
+        <Route path="/admin/update-user/:id" element={<UpdateUser />} />
+        <Route path="/admin/manage-users" element={<ManageUsers />} />
         <Route path="/create-property" element={<CreateProperty />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
