@@ -10,6 +10,7 @@ router.get('/getPendingProperties',auth.verifyToken,auth.isAdmin,adminController
 
 router.post('/createSalesAgent',auth.verifyToken, auth.isAdmin, adminController.createSalesAgent);
 router.post('/createAdmin', auth.verifyToken, auth.isAdmin, adminController.createAdmin);
+router.post('/createUser', auth.verifyToken, auth.isAdmin, adminController.createUser);
 
 router.patch('/property/:id/approve',auth.verifyToken,auth.isAdmin,adminController.approveProperty);
 

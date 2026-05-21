@@ -7,7 +7,7 @@ const API_BASE = 'http://localhost:4000';
 function UpdateUser() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({ name: '', email: '', role: 'sales-agent', password: '', confirmPassword: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', role: 'buyer', password: '', confirmPassword: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -102,8 +102,8 @@ function UpdateUser() {
             <div className="form-group">
               <label htmlFor="role">User Role</label>
               <select id="role" name="role" value={formData.role} onChange={handleChange} className="form-select">
-                <option value="sales-agent">Sales Agent</option>
-                <option value="admin">Admin</option>
+                <option value="buyer">Renter / Buyer</option>
+                <option value="owner">Owner</option>
               </select>
             </div>
 
