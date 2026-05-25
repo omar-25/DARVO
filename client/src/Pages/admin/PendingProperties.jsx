@@ -1,5 +1,6 @@
   import React, { useState, useEffect, useCallback } from 'react';
   import { useNavigate } from 'react-router-dom';
+  import ThemeToggle from '../../components/ThemeToggle';
   import './PendingProperties.css';
 
   const API_BASE = 'http://localhost:4000';
@@ -74,16 +75,16 @@
           <div className="card-name">{propertyName}</div>
           <div className="card-chips">
             <span className="chip chip-type">{propertyType}</span>
-            <span className="chip">📍 {propertyLocation}</span>
-            <span className="chip">🛏 {bedrooms} &nbsp; 🚿 {bathrooms}</span>
+            <span className="chip">{propertyLocation}</span>
+            <span className="chip">{bedrooms} bed  ·  {bathrooms} bath</span>
             {livingArea && <span className="chip">{livingArea} m²</span>}
           </div>
           <div className="card-hint">Click to view details · Submitted {date}</div>
         </div>
 
         <div className="card-actions" onClick={e => e.stopPropagation()}>
-          <button className="btn-accept" onClick={() => onAccept(_id)}>✓ Accept</button>
-          <button className="btn-reject" onClick={() => onReject(_id)}>✕ Reject</button>
+          <button className="btn-accept" onClick={() => onAccept(_id)}>Accept</button>
+          <button className="btn-reject" onClick={() => onReject(_id)}>Reject</button>
         </div>
       </div>
     );
@@ -332,14 +333,15 @@
               className="update-user-btn"
               onClick={() => navigate('/admin/manage-users')}
             >
-              ✎ Manage Users
+              Manage Users
             </button>
             <button
               className="delete-user-btn"
               onClick={() => navigate('/admin/delete-property')}
             >
-              🗑 Delete Property
+              Delete Property
             </button>
+            <ThemeToggle iconOnly />
           </div>
             <div id ="size">
             <button id="logout-btn" onClick={() => {

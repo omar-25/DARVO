@@ -1,0 +1,81 @@
+﻿.egypt-globe-shell {
+  width: min(460px, 100%);
+  aspect-ratio: 1 / 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.egypt-map-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 32px;
+  overflow: hidden;
+  /* Make the frame background transparent so the SVG/map shows through */
+  background: transparent;
+  border: 0; /* keep no opaque border by default */
+  box-shadow: none; /* remove heavy shadow to keep background transparent */
+}
+
+.egypt-map-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  /* optional subtle drop shadow for map shape; keep small so transparency reads well */
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.25));
+  position: relative;
+  z-index: 1;
+}
+
+.egypt-map-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* remove overlay to avoid adding any opaque layer over the map */
+  background: transparent;
+}
+
+/* Outline SVG overlay placed above the image */
+.egypt-outline-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.egypt-outline-path {
+  fill: none;
+  stroke: url(#glowGradGlobe);
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  /* dasharray and animation are configured at runtime per-path for accurate movement */
+  stroke-dasharray: var(--dashsize, 140) var(--dashlen, 1200);
+  animation: outlineMove 2.0s linear infinite;
+  filter: drop-shadow(0 0 15px rgb(253, 188, 25)) drop-shadow(0 0 22px rgba(255, 196, 47, 0.85));
+}
+
+@keyframes outlineMove {
+  from { stroke-dashoffset: 0; }
+  to   { stroke-dashoffset: calc(-1 * var(--dashlen, 1400)); }
+}
+
+.egypt-globe-dark .egypt-map-frame {
+  /* keep transparent but allow an optional subtle inner border for contrast */
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.egypt-globe-light .egypt-map-frame {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}

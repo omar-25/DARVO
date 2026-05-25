@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ThemeToggle from '../../components/ThemeToggle';
 import './PendingProperties.css';
 
 const API_BASE = 'http://localhost:4000';
@@ -107,6 +108,7 @@ function DeleteProperty() {
           <button className="update-user-btn" onClick={() => navigate('/admin/manage-users')}>
             Manage Users
           </button>
+          <ThemeToggle iconOnly />
         </div>
 
         <div id="size">

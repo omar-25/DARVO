@@ -9,6 +9,14 @@ function AdvancedFilterPage() {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [showFilters, setShowFilters] = useState(true);
+  const [theme, setTheme] = useState(() => localStorage.getItem('darvo-theme') || 'dark');
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('darvo-theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => setTheme(t => t === 'dark' ? 'light' : 'dark');
 
   // Filter states
   const [filters, setFilters] = useState({
@@ -227,12 +235,26 @@ function AdvancedFilterPage() {
       {/* Header */}
       <header className="filter-header">
         <div className="header-container">
-          <div className="logo">
-            <h1>Darvo <span>Real Estate</span></h1>
-          </div>
-          <div className="user-info">
-            <span className="user-name">Welcome, {user?.name || 'User'}!</span>
-            <button onClick={handleLogout} className="logout-btn">Logout</button>
+          <span className="darvo-logo">Darvo <span>Estates</span></span>
+          <div className="user-info" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Welcome, {user?.name || 'User'}</span>
+            <button onClick={toggleTheme} className="theme-toggle-btn" aria-label="Toggle theme">
+              {theme === 'dark' ? (
+                <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+              ) : (
+                <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+              )}
+            </button>
+            <button onClick={handleLogout} style={{
+              padding: '8px 16px',
+              background: 'transparent',
+              color: 'var(--text-muted)',
+              border: '1px solid var(--border-default)',
+              borderRadius: 'var(--radius-md)',
+              fontSize: '0.82rem',
+              fontWeight: '600',
+              cursor: 'pointer',
+            }}>Sign out</button>
           </div>
         </div>
       </header>

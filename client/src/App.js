@@ -12,6 +12,11 @@ import AddUser from './Pages/admin/AddUser';
 import UpdateUser from './Pages/admin/UpdateUser';
 import ManageUsers from './Pages/admin/ManageUsers';
 import DeleteProperty from './Pages/admin/DeleteProperty';
+import EgyptLoader from "./components/EgyptLoader";
+
+// Apply saved theme immediately (before first render)
+const savedTheme = localStorage.getItem('darvo-theme') || 'dark';
+document.documentElement.setAttribute('data-theme', savedTheme);
 
 function App() {
   return (
@@ -30,6 +35,7 @@ function App() {
         <Route path="/advanced-filter" element={<AdvancedFilterPage />} />
         <Route path="/property/:id" element={<PropertyDetails />} />
         <Route path="/compare/:idA/:idB" element={<CompareProperties />} />
+        <Route path="/loader" element={<EgyptLoader />} />
       </Routes>
     </BrowserRouter>
   );

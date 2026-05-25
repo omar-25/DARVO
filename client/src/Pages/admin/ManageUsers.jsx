@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ThemeToggle from '../../components/ThemeToggle';
 import './PendingProperties.css';
 
 const API_BASE = 'http://localhost:4000';
@@ -69,6 +70,7 @@ function ManageUsers() {
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           <button className="back-btn" onClick={() => navigate('/admin/properties')}>Back to Admin</button>
           <button className="add-user-btn" onClick={() => navigate('/admin/add-user')}>+ Add User</button>
+          <ThemeToggle iconOnly />
           <button id="logout-btn" onClick={() => { localStorage.removeItem('token'); localStorage.removeItem('user'); navigate('/login'); }}>Logout</button>
         </div>
       </header>

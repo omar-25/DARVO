@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import ThemeToggle from '../../components/ThemeToggle';
 import './AddUser.css';
 
 const API_BASE = 'http://localhost:4000';
@@ -83,10 +84,11 @@ function UpdateUser() {
     <div className="add-user-page">
       <header className="add-user-header">
         <div className="header-container">
-          <div className="logo">
-            <h1>Darvo <span>Real Estate</span></h1>
+          <span className="darvo-logo">Darvo <span>Estates</span></span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <ThemeToggle iconOnly />
+            <button onClick={() => navigate('/admin/properties')} className="back-btn">Back to Admin</button>
           </div>
-          <button onClick={() => navigate('/admin/properties')} className="back-btn">Back to Admin</button>
         </div>
       </header>
 

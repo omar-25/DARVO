@@ -1,13 +1,352 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@600;700;800&display=swap');
+
+/* ─── Design Tokens ─────────────────────────────────────────────────────────── */
+:root {
+  /* Brand */
+  --brand-gold: #C9A84C;
+  --brand-gold-light: #E8C97A;
+  --brand-gold-dark: #A07830;
+  --brand-gold-glow: rgba(201, 168, 76, 0.18);
+
+  /* Dark theme defaults */
+  --bg-base: #0A0B0E;
+  --bg-surface: #111318;
+  --bg-elevated: #181C23;
+  --bg-overlay: #1F2430;
+  --bg-card: #161A21;
+  --bg-card-hover: #1C2130;
+  --border-subtle: rgba(255,255,255,0.06);
+  --border-default: rgba(255,255,255,0.10);
+  --border-gold: rgba(201,168,76,0.35);
+  --border-gold-strong: rgba(201,168,76,0.65);
+  --text-primary: #F1F2F5;
+  --text-secondary: #9BA3B4;
+  --text-muted: #5C6478;
+  --text-gold: #C9A84C;
+  --text-inverse: #0A0B0E;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* ─── Light Theme Overrides ──────────────────────────────────────────────────── */
+[data-theme="light"] {
+  --bg-base: #F5F5F0;
+  --bg-surface: #FFFFFF;
+  --bg-elevated: #EFEFEB;
+  --bg-overlay: #E6E6E0;
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #F5F5F0;
+  --border-subtle: rgba(0,0,0,0.06);
+  --border-default: rgba(0,0,0,0.12);
+  --border-gold: rgba(160,120,48,0.35);
+  --border-gold-strong: rgba(160,120,48,0.65);
+  --text-primary: #1A1A1A;
+  --text-secondary: #4A4A5A;
+  --text-muted: #888898;
+  --text-gold: #A07830;
+  --text-inverse: #FFFFFF;
+  --brand-gold: #A07830;
+  --brand-gold-light: #C9A84C;
+  --brand-gold-dark: #7A5C20;
+  --brand-gold-glow: rgba(160, 120, 48, 0.12);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,0.12);
+  --shadow-gold: 0 0 32px rgba(160,120,48,0.10);
+  --shadow-gold-strong: 0 0 48px rgba(160,120,48,0.18);
 }
+
+/* Light theme: glass cards use solid white */
+[data-theme="light"] .glass-card {
+  background: rgba(255,255,255,0.95);
+}
+
+/* Light theme: scrollbar */
+[data-theme="light"] ::-webkit-scrollbar-track { background: var(--bg-elevated); }
+[data-theme="light"] ::-webkit-scrollbar-thumb { background: var(--bg-overlay); }
+
+/* Light theme: auth panel gets a warm gradient */
+[data-theme="light"] .auth-panel {
+  background: linear-gradient(160deg, #E8E8DC 0%, #F0EDDF 60%, #EAE8DE 100%);
+}
+[data-theme="light"] .auth-panel::before {
+  background:
+    radial-gradient(ellipse 60% 60% at 30% 40%, rgba(160,120,48,0.10) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 70% 70%, rgba(160,120,48,0.06) 0%, transparent 60%);
+}
+[data-theme="light"] .auth-panel-grid {
+  background-image:
+    linear-gradient(rgba(160,120,48,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(160,120,48,0.06) 1px, transparent 1px);
+}
+
+/* Light theme: hero gradient */
+[data-theme="light"] .hero::before {
+  background: radial-gradient(ellipse 70% 60% at 50% 0%, rgba(160,120,48,0.08) 0%, transparent 70%);
+}
+[data-theme="light"] .hero-grid {
+  background-image:
+    linear-gradient(rgba(160,120,48,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(160,120,48,0.04) 1px, transparent 1px);
+}
+
+/* Light theme: header becomes opaque white */
+[data-theme="light"] .home-header,
+[data-theme="light"] .filter-header,
+[data-theme="light"] .details-header,
+[data-theme="light"] .admin-header {
+  background: rgba(255,255,255,0.92);
+  border-bottom-color: rgba(0,0,0,0.08);
+}
+
+/* Light theme: skeleton shimmer */
+[data-theme="light"] .shimmer {
+  background: linear-gradient(90deg, #E8E8E2 25%, #D8D8D2 50%, #E8E8E2 75%);
+  background-size: 200% 100%;
+}
+
+/* Light theme: toast */
+[data-theme="light"] .toast-accept {
+  background: rgba(240,255,244,0.98);
+  border-color: rgba(34,197,94,0.3);
+  color: #166534;
+}
+[data-theme="light"] .toast-reject {
+  background: rgba(255,240,240,0.98);
+  border-color: rgba(239,68,68,0.3);
+  color: #991B1B;
+}
+
+/* ─── Status / Spacing / Shadow tokens (shared, no theme override needed) ──── */
+:root {
+  /* Status Colors */
+  --green: #22C55E;
+  --green-bg: rgba(34,197,94,0.12);
+  --red: #EF4444;
+  --red-bg: rgba(239,68,68,0.12);
+  --amber: #F59E0B;
+  --amber-bg: rgba(245,158,11,0.12);
+  --blue: #3B82F6;
+  --blue-bg: rgba(59,130,246,0.12);
+
+  /* Spacing */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* Shadows (dark defaults — light theme overrides above) */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.4);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.5);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,0.6);
+  --shadow-gold: 0 0 32px rgba(201,168,76,0.15);
+  --shadow-gold-strong: 0 0 48px rgba(201,168,76,0.25);
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.25s ease;
+  --transition-slow: 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* ─── Reset & Base ──────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+}
+
+a {
+  color: var(--brand-gold);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+a:hover { color: var(--brand-gold-light); }
+
+img { display: block; max-width: 100%; }
+
+button {
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+}
+
+input, select, textarea {
+  font-family: 'Inter', sans-serif;
+}
+
+/* ─── Scrollbar ─────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-surface); }
+::-webkit-scrollbar-thumb {
+  background: var(--bg-overlay);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--border-gold); }
+
+/* ─── Global Utility Classes ────────────────────────────────────────────────── */
+.darvo-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+.darvo-logo span {
+  color: var(--brand-gold);
+}
+
+/* Glass morphism card */
+.glass-card {
+  background: rgba(22, 26, 33, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+}
+
+/* Primary button */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 24px;
+  background: linear-gradient(135deg, var(--brand-gold) 0%, var(--brand-gold-light) 100%);
+  color: var(--text-inverse);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition: all var(--transition-base);
+  box-shadow: 0 4px 16px var(--brand-gold-glow);
+}
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(201,168,76,0.3);
+  filter: brightness(1.08);
+}
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Ghost button */
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all var(--transition-base);
+}
+.btn-ghost:hover {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border-color: var(--border-default);
+}
+
+/* Status badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.badge-green  { background: var(--green-bg);  color: var(--green);  border: 1px solid rgba(34,197,94,0.25); }
+.badge-red    { background: var(--red-bg);    color: var(--red);    border: 1px solid rgba(239,68,68,0.25); }
+.badge-amber  { background: var(--amber-bg);  color: var(--amber);  border: 1px solid rgba(245,158,11,0.25); }
+.badge-blue   { background: var(--blue-bg);   color: var(--blue);   border: 1px solid rgba(59,130,246,0.25); }
+.badge-gold   { background: var(--brand-gold-glow); color: var(--brand-gold); border: 1px solid var(--border-gold); }
+
+/* Loading shimmer */
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.shimmer {
+  background: linear-gradient(90deg, var(--bg-elevated) 25%, var(--bg-overlay) 50%, var(--bg-elevated) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s infinite;
+}
+
+/* Fade-in animation */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-in-up { animation: fadeInUp 0.4s ease forwards; }
+
+/* Toast slide-in */
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(120%); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ─── Theme Toggle Button ───────────────────────────────────────────────────── */
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  background: var(--bg-elevated);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  white-space: nowrap;
+  font-family: 'Inter', sans-serif;
+}
+
+.theme-toggle-btn svg {
+  flex-shrink: 0;
+  transition: transform 0.4s ease;
+}
+
+.theme-toggle-btn:hover {
+  background: var(--brand-gold-glow);
+  color: var(--brand-gold);
+  border-color: var(--border-gold);
+  transform: translateY(-1px);
+}
+
+.theme-toggle-btn:hover svg {
+  transform: rotate(20deg);
+}
+
+/* In auth context — float to top-right of form panel */
+.auth-form-panel .theme-toggle-btn {
+  margin-bottom: 28px;
+  align-self: flex-start;
+}
+
+/* Smooth theme transition on the whole page */
+html {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+*, *::before, *::after {
+  transition-property: background-color, border-color, color;
+  transition-duration: 0.25s;
+  transition-timing-function: ease;
+}
+
